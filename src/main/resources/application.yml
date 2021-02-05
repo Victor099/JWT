@@ -1,0 +1,5 @@
+jwt:
+  expiration:
+    minutes: 2
+  tolerance:
+    minutes: 5
