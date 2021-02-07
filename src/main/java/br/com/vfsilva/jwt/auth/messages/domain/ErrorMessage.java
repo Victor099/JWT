@@ -1,6 +1,5 @@
-package br.com.security.jwt.messages.domain;
+package br.com.vfsilva.jwt.auth.messages.domain;
 
-import br.com.security.jwt.messages.TypeMessage;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;

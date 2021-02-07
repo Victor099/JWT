@@ -1,4 +1,4 @@
-package br.com.security.jwt.auth.util;
+package br.com.vfsilva.jwt.auth.util;
 
 /**
  * Status JWT Security.

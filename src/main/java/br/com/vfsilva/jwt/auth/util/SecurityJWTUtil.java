@@ -1,10 +1,9 @@
-package br.com.security.jwt.util;
+package br.com.vfsilva.jwt.auth.util;
 
-import br.com.security.jwt.auth.util.SecurityJWTStatus;
-import br.com.security.jwt.messages.domain.ErrorStack;
-import br.com.security.jwt.model.SecurityJWTBody;
-import br.com.security.jwt.model.SecurityJWTModel;
-import br.com.security.jwt.model.SecurityJWTWrapper;
+import br.com.vfsilva.jwt.auth.messages.domain.ErrorStack;
+import br.com.vfsilva.jwt.auth.model.SecurityJWTBody;
+import br.com.vfsilva.jwt.auth.model.SecurityJWTModel;
+import br.com.vfsilva.jwt.auth.model.SecurityJWTWrapper;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

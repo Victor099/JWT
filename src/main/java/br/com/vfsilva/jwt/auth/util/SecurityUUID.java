@@ -1,4 +1,4 @@
-package br.com.security.jwt.util;
+package br.com.vfsilva.jwt.auth.util;
 
 import java.util.UUID;
 

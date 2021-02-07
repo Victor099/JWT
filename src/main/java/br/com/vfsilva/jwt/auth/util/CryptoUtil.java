@@ -1,4 +1,4 @@
-package br.com.security.jwt.util;
+package br.com.vfsilva.jwt.auth.util;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package br.com.security.jwt.messages;
+package br.com.vfsilva.jwt.auth.messages;
 
 public enum TypeMessage {
 

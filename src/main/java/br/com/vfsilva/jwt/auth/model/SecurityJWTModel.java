@@ -1,4 +1,4 @@
-package br.com.security.jwt.model;
+package br.com.vfsilva.jwt.auth.model;
 
 import lombok.Builder;
 import lombok.Getter;

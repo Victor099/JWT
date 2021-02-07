@@ -1,4 +1,4 @@
-package br.com.security.jwt.messages.domain;
+package br.com.vfsilva.jwt.auth.messages.domain;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
@@ -23,5 +23,9 @@ public class ErrorStack {
 
     public List<ErrorMessage> getErrors() {
         return this.errors;
+    }
+
+    public Boolean isError() {
+        return this.errors.size() > 0;
     }
 }

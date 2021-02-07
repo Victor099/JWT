@@ -1,6 +1,6 @@
-package br.com.security.jwt.messages.domain;
+package br.com.vfsilva.jwt.auth.messages.domain;
 
-import br.com.security.jwt.messages.TypeMessage;
+import br.com.vfsilva.jwt.auth.messages.TypeMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class MessageStack {
 
-    private List<Message> messages;
+    private final List<Message> messages;
 
     public MessageStack() {
         this.messages = new ArrayList<>();
