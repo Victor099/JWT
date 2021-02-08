@@ -30,6 +30,12 @@ Nessa camada é onde será implementado a lógica de geração de token.
 @Api(value = "[ /auth/login ] - API Login", tags = {"Login"})
 public class LoginController extends AbstractLoginController<LoginApp, LoginInputDTO> {
 
+    private final LoginApp app;
+
+    public Main(LoginApp loginApp) {
+        super(loginApp);
+        this.app = loginApp;
+    }
 }
 ```
 ### App:

@@ -29,7 +29,10 @@ public abstract class ControllerUtil<APP, P> {
     Object executeMethodLogin(APP app, P param) {
         try {
             return app.getClass().getMethod("login", param.getClass()).invoke(app, param);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new VfsilvaException(generateError(null, errorStack.getErrors()));
+        } catch (NoSuchMethodException ex) {
+            errorStack.addMessage("Método login não encontrado.");
             throw new VfsilvaException(generateError(null, errorStack.getErrors()));
         }
     }
@@ -43,7 +46,10 @@ public abstract class ControllerUtil<APP, P> {
     Object executeMethodRefreshToken(APP app) {
         try {
             return app.getClass().getMethod("refreshToken").invoke(app);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new VfsilvaException(generateError(null, errorStack.getErrors()));
+        } catch (NoSuchMethodException ex) {
+            errorStack.addMessage("Método refreshToken não encontrado.");
             throw new VfsilvaException(generateError(null, errorStack.getErrors()));
         }
     }
