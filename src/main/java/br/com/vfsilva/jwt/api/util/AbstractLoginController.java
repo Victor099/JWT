@@ -2,6 +2,7 @@ package br.com.vfsilva.jwt.api.util;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,10 @@ import java.lang.reflect.InvocationTargetException;
  * @param <P> Classe de parâmetro para realizar o login
  */
 @Slf4j
+@RequiredArgsConstructor
 public abstract class AbstractLoginController<APP, P> extends ControllerUtil<APP, P> {
 
-    @Autowired
-    public APP app;
+    protected final APP app;
 
     @PostMapping
     public ResponseEntity<Object> login(@RequestBody final P param) {
