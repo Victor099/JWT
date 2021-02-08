@@ -31,6 +31,7 @@ springBoot {
 }
 
 ext {
+    jaxbVersion = '2.3.1'
     jwtVersion = '0.9.0'
     springFoxVersion = '3.0.0'
     gsonVersion = '2.7'
@@ -46,6 +47,7 @@ dependencies {
     implementation("io.springfox:springfox-boot-starter:$springFoxVersion")
     implementation("io.jsonwebtoken:jjwt:$jwtVersion")
 
+    compile ("javax.xml.bind:jaxb-api:$jaxbVersion")
     compile("org.jasypt:jasypt:$jasyptVersion")
     compile("org.apache.commons:commons-lang3:$commonsVersion")
     compile("com.google.code.gson:gson:$gsonVersion")

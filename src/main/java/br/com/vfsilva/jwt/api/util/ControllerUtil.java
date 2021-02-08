@@ -1,46 +1,36 @@
 package br.com.vfsilva.jwt.api.util;
 
 import br.com.vfsilva.jwt.auth.messages.domain.ErrorMessage;
+import br.com.vfsilva.jwt.auth.messages.domain.ErrorStack;
 import br.com.vfsilva.jwt.util.exception.VfsilvaException;
-import br.com.vfsilva.jwt.util.exception.VfsilvaMethodNotFoundException;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * Classe utilitária controller
  *
  * @param <APP> Classe de aplicação
- * @param <P> Classe de parâmetro para realizar o login
+ * @param <P>   Classe de parâmetro para realizar o login
  */
-public class ControllerUtil<APP, P> {
+public abstract class ControllerUtil<APP, P> {
 
-    private final Class<APP> clazz;
-
-    public ControllerUtil(Class<APP> clazz) {
-        this.clazz = clazz;
-    }
+    @Autowired
+    public ErrorStack errorStack;
 
     /**
      * Método responsável por acessar o método da classe APP com o nome de "login"
      *
-     * @param app Instância da classe de aplicação
+     * @param app   Instância da classe de aplicação
      * @param param Parâmetros do método "login" da classe APP
      * @return Objeto de retorno do método "login" da classe APP
      */
     Object executeMethodLogin(APP app, P param) {
         try {
             return app.getClass().getMethod("login", param.getClass()).invoke(app, param);
-        } catch (NoSuchMethodException e) {
-            throw new VfsilvaMethodNotFoundException(ErrorMessage.builder()
-                    .title("Atenção.")
-                    .error("Não foi possível localizar o método com o nome (login).")
-                    .build());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new VfsilvaException(ErrorMessage.builder()
-                    .title("Atenção.")
-                    .error("e.getMessage()")
-                    .build());
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new VfsilvaException(generateError(null, errorStack.getErrors()));
         }
     }
 
@@ -53,25 +43,23 @@ public class ControllerUtil<APP, P> {
     Object executeMethodRefreshToken(APP app) {
         try {
             return app.getClass().getMethod("refreshToken").invoke(app);
-        } catch (NoSuchMethodException e) {
-            throw new VfsilvaMethodNotFoundException(ErrorMessage.builder()
-                    .title("Atenção.")
-                    .error("Não foi possível localizar o método com o nome (refreshToken) sem parâmetros.")
-                    .build());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new VfsilvaException(ErrorMessage.builder()
-                    .title("Atenção.")
-                    .error("teste")
-                    .build());
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new VfsilvaException(generateError(null, errorStack.getErrors()));
         }
     }
 
     /**
-     * Método responsável por pegar instância da classe APP
-     * @param applicationContext Responsável para pegar o Bean da classe
-     * @return Instância da classe APP com bean
+     * Método para gerar ErrorMessage
+     *
+     * @param error
+     * @param details Lista com errors atribuidos nas classes que utilizam ErrorStack
+     * @return ErrorMessage
      */
-    APP getInstanceApp(ApplicationContext applicationContext) {
-        return applicationContext.getBean(clazz);
+    private ErrorMessage generateError(final String error, final List<ErrorMessage> details) {
+        return ErrorMessage.builder()
+                .title("Atenção")
+                .error(error)
+                .details(details)
+                .build();
     }
 }

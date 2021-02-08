@@ -5,11 +5,7 @@ import br.com.vfsilva.jwt.auth.model.SecurityJWTBody;
 import br.com.vfsilva.jwt.auth.model.SecurityJWTModel;
 import br.com.vfsilva.jwt.auth.model.SecurityJWTWrapper;
 import com.google.gson.Gson;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -26,21 +22,22 @@ import java.util.Objects;
  * @author Victor Felix da Silva (vfsilva099@gmail.com)
  */
 @Component
-class SecurityJWTUtil {
+public class SecurityJWTUtil {
 
     @Autowired
     private Environment env;
 
-    private final String SECRET_JWT = "170c29a3b90c460e95df690b8e7da798ecb229d620dae51f74bafa9407996893154a3386993a0d839165c6a87a7e1ef28bc253b9598ead7e77941fa8db22afce";
+    private final String SECRET_JWT = "536186bbff1dc3c493540906147774da3f20c830a18a7e205ed4a31d053a8195";
+    private final String TOKEN_PREFIX = "Bearer ";
     private final String HEADER_AUTHORIZATION = "Authorization";
     private final String HEADER_REFRESH_TOKEN = "RefreshToken";
 
     /**
      * Método responsável pela criação do token e autenticação jwt.
      *
-     * @param request Http request
+     * @param request  Http request
      * @param response Http response
-     * @param handler Corpo do que vai estar dentro do authorization
+     * @param handler  Corpo do que vai estar dentro do authorization
      */
     public void addAuthentication(final HttpServletRequest request, final HttpServletResponse response, final SecurityJWTWrapper handler) {
         final String host = capturaOrigemRequest(request);
@@ -53,12 +50,15 @@ class SecurityJWTUtil {
     /**
      * Método responsável pela verificação para realizar o refreshToken
      *
-     * @param request Http request
-     * @param response Http response
+     * @param request    Http request
+     * @param response   Http response
      * @param errorStack Pilha de erros
      * @return Status para realizar o RefreshToken
      */
-    public SecurityJWTStatus validateRefreshToken(final HttpServletRequest request, final HttpServletResponse response, final ErrorStack errorStack) {
+    public SecurityJWTStatus validateRefreshToken(final HttpServletRequest request,
+                                                  final HttpServletResponse response,
+                                                  final ErrorStack errorStack) {
+
         final String token = request.getHeader(HEADER_AUTHORIZATION);
         final String refreshToken = request.getHeader(HEADER_REFRESH_TOKEN);
 
@@ -68,8 +68,8 @@ class SecurityJWTUtil {
         }
 
         // RETIRANDO BEARER DO TOKEN
-        String TOKEN_PREFIX = "Bearer ";
         String[] _jwt = token.split(TOKEN_PREFIX);
+
         if (_jwt.length < 2) {
             errorStack.addMessage("Sessão inválida.");
             return SecurityJWTStatus.INVALID;
@@ -103,12 +103,29 @@ class SecurityJWTUtil {
         return SecurityJWTStatus.OK;
     }
 
+    public SecurityJWTBody getBodyJWT(final HttpServletRequest request, final ErrorStack errorStack) {
+        final String token = request.getHeader(HEADER_AUTHORIZATION);
+        String[] _jwt = token.split(TOKEN_PREFIX);
+
+        if (_jwt.length < 2) {
+            errorStack.addMessage("Sessão inválida.");
+        }
+
+        Jws<Claims> claims = decodeToleranceJWT(_jwt[1]);
+
+        if (Objects.isNull(claims.getBody())) {
+            errorStack.addMessage("Erro ao buscar o corpo do authentication");
+            return null;
+        }
+
+        return new Gson().fromJson(claims.getBody().getIssuer(), SecurityJWTBody.class);
+    }
 
     /**
      * Método responsável por gerar o token e o refreshToken
      *
      * @param handler Pacote do que ficará encapsulado dentro do token
-     * @param host Origem de acesso para gerar o token
+     * @param host    Origem de acesso para gerar o token
      * @return Token e RefreshToken
      */
     private SecurityJWTModel generateToken(final SecurityJWTWrapper handler, final String host) {
@@ -154,7 +171,7 @@ class SecurityJWTUtil {
                 .signWith(SignatureAlgorithm.HS512, Base64.getEncoder().encodeToString(SECRET_JWT.getBytes()))
                 .compact();
 
-        return SecurityJWTModel.builder().token(tokenJWT).refreshToken(refreshToken).build();
+        return SecurityJWTModel.builder().token(TOKEN_PREFIX + tokenJWT).refreshToken(refreshToken).build();
     }
 
     /**

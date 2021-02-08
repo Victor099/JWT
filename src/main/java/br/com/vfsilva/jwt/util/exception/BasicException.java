@@ -26,4 +26,8 @@ public class BasicException extends RuntimeException {
 		super(MessageFormat.format("{0}: {1} ({2})", error.getTitle(), error.getError(), error.getDetails()));
 		this.error = error;
 	}
+
+	public ErrorMessage getErrorMessage() {
+		return error;
+	}
 }
