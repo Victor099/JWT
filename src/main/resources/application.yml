@@ -3,3 +3,8 @@ jwt:
     minutes: 2
   tolerance:
     minutes: 5
+spring:
+  security:
+    user:
+      name: cin_vsilva
+      password: 123456
