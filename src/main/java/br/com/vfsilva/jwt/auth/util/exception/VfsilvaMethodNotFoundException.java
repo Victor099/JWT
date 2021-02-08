@@ -1,4 +1,4 @@
-package br.com.vfsilva.jwt.util.exception;
+package br.com.vfsilva.jwt.auth.util.exception;
 
 import br.com.vfsilva.jwt.auth.messages.domain.ErrorMessage;
 

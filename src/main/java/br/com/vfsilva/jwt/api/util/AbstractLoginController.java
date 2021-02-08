@@ -32,8 +32,8 @@ public abstract class AbstractLoginController<APP, P> extends ControllerUtil<APP
     @PostMapping("/refreshToken")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "Authorization", required = true, paramType = "header"),
-            @ApiImplicitParam(name = "RefreshToken", required = true, paramType = "header")}
-    )
+            @ApiImplicitParam(name = "RefreshToken", required = true, paramType = "header")
+    })
     public ResponseEntity<Object> refreshToken() {
         return ResponseEntity.ok(executeMethodRefreshToken(app));
     }
