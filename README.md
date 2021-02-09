@@ -141,3 +141,5 @@ public class LoginService extends ServiceUtil implements ILoginService {
   - ***VfsilvaUnauthorizedException***
   - ***VfsilvaExpirationTypeException***
   - ***VfsilvaMethodNotFoundException***
+  
+- ***Email***: vfsilva099@gmail.com
