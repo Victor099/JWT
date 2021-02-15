@@ -1,15 +1,10 @@
 package br.com.vfsilva.jwt.api.util;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Classe abstrata para o controller de login e refresh token.
@@ -31,10 +26,6 @@ public abstract class AbstractLoginController<APP, P> extends ControllerUtil<APP
     }
 
     @PostMapping("/refreshToken")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "Authorization", required = true, paramType = "header"),
-            @ApiImplicitParam(name = "RefreshToken", required = true, paramType = "header")
-    })
     public ResponseEntity<Object> refreshToken() {
         return ResponseEntity.ok(executeMethodRefreshToken(app));
     }

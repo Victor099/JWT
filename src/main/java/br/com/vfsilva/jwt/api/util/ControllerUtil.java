@@ -3,8 +3,10 @@ package br.com.vfsilva.jwt.api.util;
 import br.com.vfsilva.jwt.auth.messages.domain.ErrorMessage;
 import br.com.vfsilva.jwt.auth.messages.domain.ErrorStack;
 import br.com.vfsilva.jwt.auth.util.exception.VfsilvaException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

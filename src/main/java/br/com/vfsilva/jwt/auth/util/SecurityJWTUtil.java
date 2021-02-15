@@ -128,7 +128,7 @@ public class SecurityJWTUtil {
      * @param host    Origem de acesso para gerar o token
      * @return Token e RefreshToken
      */
-    private SecurityJWTModel generateToken(final SecurityJWTWrapper handler, final String host) {
+    public SecurityJWTModel generateToken(final SecurityJWTWrapper handler, final String host) {
 
         String clientID = SecurityUUID.generateID();
 

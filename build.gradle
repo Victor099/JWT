@@ -1,20 +1,30 @@
 plugins {
     id 'org.springframework.boot' version '2.4.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'maven-publish'
     id 'java'
 }
 
 group = 'br.com.security'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+version = '0.0.1'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+    options.compilerArgs << '-parameters'
+}
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
 }
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -33,7 +43,6 @@ springBoot {
 ext {
     jaxbVersion = '2.3.1'
     jwtVersion = '0.9.0'
-    springFoxVersion = '3.0.0'
     gsonVersion = '2.7'
     commonsVersion = '3.11'
     jasyptVersion = '1.9.2'
@@ -44,7 +53,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation('org.springframework.boot:spring-boot-starter-undertow')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
-    implementation("io.springfox:springfox-boot-starter:$springFoxVersion")
     implementation("io.jsonwebtoken:jjwt:$jwtVersion")
 
     compile ("javax.xml.bind:jaxb-api:$jaxbVersion")
@@ -59,6 +67,26 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 }
 
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+publishing {
+    repositories {
+        maven {
+            url mavenLocal().getUrl()
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
 test {
     useJUnitPlatform()
 }

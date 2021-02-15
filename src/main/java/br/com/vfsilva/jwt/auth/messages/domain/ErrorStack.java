@@ -1,5 +1,6 @@
 package br.com.vfsilva.jwt.auth.messages.domain;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -7,14 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequestScope
+@NoArgsConstructor
 @Component
 public class ErrorStack {
 
-    private List<ErrorMessage> errors;
-
-    public ErrorStack() {
-        this.errors = new ArrayList<>();
-    }
+    private final List<ErrorMessage> errors = new ArrayList<>();
 
     public void addMessage(final String error) {
         final ErrorMessage handler = ErrorMessage.builder().error(error).build();
