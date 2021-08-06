@@ -128,9 +128,9 @@ public class LoginService extends ServiceUtil implements ILoginService {
 ### Outras classes utilitárias:
 - **ServiceUtil**: Classe utilitária responsável por criar o método ***generateError()***.
 - **ILoginService**: Interface responsável por criar o contrato de todos os métodos que dever estar na camada de service.
-- **ErrorStack**: É um @RequestScope o que significa que ele é um bean que será criado somente quando houver uma solicitação,
+- **ErrorStack**: É um @RequestScope o que significa que ele é um bean que será criado somente quando houver uma solicitação REST,
   enquanto a solicitação não for finalizada será utilizado a mesma instância dessa classe, contendo um ***addMessage(String msgError)***. 
-- **MessageStack**: É um @RequestScope o que significa que ele é um bean que será criado somente quando houver uma solicitação,
+- **MessageStack**: É um @RequestScope o que significa que ele é um bean que será criado somente quando houver uma solicitação REST,
   enquanto a solicitação não for finalizada será utilizado a mesma instância dessa classe, contendo um ***addMessage(TypeMessage type, String msgError)***.
 - **TypeMessage**: Enumerador com tipos de mensagens (Error, Info, Warning, Success)
 - **ConverterDTO<DTO, MODEL>**: Interface criada para quem implementar em sua classe ser obrigado a criar os métodos de conversão de DTO para Model e vice e versa
