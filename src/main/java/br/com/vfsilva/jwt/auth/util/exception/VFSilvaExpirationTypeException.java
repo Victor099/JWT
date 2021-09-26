@@ -1,8 +1,8 @@
 package br.com.vfsilva.jwt.auth.util.exception;
 
-import br.com.vfsilva.jwt.auth.messages.domain.ErrorMessage;
+import br.com.vfsilvacore.util.message.ErrorMessage;
 
-public class VFSilvaExpirationTypeException extends BasicException{
+public class VFSilvaExpirationTypeException extends BasicException {
 
     public VFSilvaExpirationTypeException(ErrorMessage errorMessage) {
         super(errorMessage);

@@ -1,9 +1,7 @@
 package br.com.vfsilva.jwt.auth.util;
 
-import br.com.vfsilva.jwt.auth.messages.domain.ErrorStack;
-import br.com.vfsilva.jwt.auth.model.SecurityJWTBody;
-import br.com.vfsilva.jwt.auth.model.SecurityJWTModel;
-import br.com.vfsilva.jwt.auth.model.SecurityJWTWrapper;
+import br.com.vfsilva.jwt.auth.model.*;
+import br.com.vfsilvacore.util.message.stack.ErrorStack;
 import com.google.gson.Gson;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,6 +174,7 @@ public class SecurityJWTUtil {
 
     /**
      * Método responsável por decodificar o authorization para conseguir pegar as informações
+     *
      * @param token Authorization
      * @return Authorization decodificado
      */
@@ -229,6 +228,7 @@ public class SecurityJWTUtil {
 
     /**
      * Método responsável por transformar o tempo em milissegundos
+     *
      * @param tokenExpirationTime Long
      * @return Tempo de expiração em milissegundos
      */

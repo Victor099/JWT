@@ -1,8 +1,8 @@
 package br.com.vfsilva.jwt.api.util;
 
-import br.com.vfsilva.jwt.auth.messages.domain.ErrorMessage;
-import br.com.vfsilva.jwt.auth.messages.domain.ErrorStack;
 import br.com.vfsilva.jwt.auth.util.exception.VfsilvaException;
+import br.com.vfsilvacore.util.message.ErrorMessage;
+import br.com.vfsilvacore.util.message.stack.ErrorStack;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
@@ -57,7 +57,7 @@ public abstract class ControllerUtil<APP, P> {
     /**
      * Método para gerar ErrorMessage
      *
-     * @param error Erro lançado.
+     * @param error   Erro lançado.
      * @param details Lista com errors atribuidos nas classes que utilizam ErrorStack
      * @return ErrorMessage
      */

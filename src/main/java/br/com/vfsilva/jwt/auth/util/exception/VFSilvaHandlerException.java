@@ -1,8 +1,8 @@
 package br.com.vfsilva.jwt.auth.util.exception;
 
-import br.com.vfsilva.jwt.auth.messages.DTOError;
-import br.com.vfsilva.jwt.auth.messages.domain.ErrorMessage;
-import br.com.vfsilva.jwt.auth.messages.domain.ErrorStack;
+import br.com.vfsilvacore.util.message.DTOError;
+import br.com.vfsilvacore.util.message.ErrorMessage;
+import br.com.vfsilvacore.util.message.stack.ErrorStack;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

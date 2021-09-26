@@ -46,6 +46,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation("io.springfox:springfox-boot-starter:$springFoxVersion")
     implementation("io.jsonwebtoken:jjwt:$jwtVersion")
+    implementation files('/home/cin_vsilva/dev/repositories/pessoal/vfsilva-core/out/artifacts/vfsilva_core_jar/vfsilva-core.jar')
 
     compile ("javax.xml.bind:jaxb-api:$jaxbVersion")
     compile("org.jasypt:jasypt:$jasyptVersion")
