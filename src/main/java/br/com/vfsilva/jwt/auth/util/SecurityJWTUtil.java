@@ -16,6 +16,9 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
 
+import static br.com.vfsilva.jwt.auth.util.SecurityJWTStatus.*;
+import static java.util.Objects.isNull;
+
 /**
  * Classe utilitária responsável por efetuar as requisições jwt.
  *
@@ -48,6 +51,48 @@ public class SecurityJWTUtil {
     }
 
     /**
+     * Validação do Token JWT da requisição.
+     *
+     * @param request    Resquest {@link HttpServletRequest}
+     * @param errorStack Stack de erro {@link ErrorStack}
+     */
+    public SecurityJWTStatus validateAuthentication(final HttpServletRequest request, final ErrorStack errorStack) {
+
+        final var token = request.getHeader(HEADER_AUTHORIZATION);
+
+        if (isNull(token)) {
+            errorStack.addMessage("sessao_nula");
+            return NULL;
+        }
+
+        // RETIRANDO BEARER DO TOKEN
+        final var jwt = token.split(TOKEN_PREFIX);
+
+        if (jwt.length < 2) {
+            errorStack.addMessage("sessao_invalida");
+            return INVALID;
+        }
+
+        Jws<Claims> claims = null;
+
+        try {
+
+            claims = decodeJWT(jwt[1]);
+
+            final var bodyJWT = new Gson().fromJson(claims.getBody().getIssuer(), SecurityJWTBody.class);
+
+        } catch (ExpiredJwtException e) {
+            return validateTypeTokenExpiration(jwt[1], errorStack);
+
+        } catch (Exception e) {
+            errorStack.addMessage("sessao_invalida");
+            return INVALID;
+        }
+
+        return OK;
+    }
+
+    /**
      * Método responsável pela verificação para realizar o refreshToken
      *
      * @param request    Http request
@@ -62,9 +107,9 @@ public class SecurityJWTUtil {
         final String token = request.getHeader(HEADER_AUTHORIZATION);
         final String refreshToken = request.getHeader(HEADER_REFRESH_TOKEN);
 
-        if (Objects.isNull(token)) {
+        if (isNull(token)) {
             errorStack.addMessage("Sessão nula.");
-            return SecurityJWTStatus.INVALID;
+            return INVALID;
         }
 
         // RETIRANDO BEARER DO TOKEN
@@ -72,7 +117,7 @@ public class SecurityJWTUtil {
 
         if (_jwt.length < 2) {
             errorStack.addMessage("Sessão inválida.");
-            return SecurityJWTStatus.INVALID;
+            return INVALID;
         }
 
         Jws<Claims> claims = null;
@@ -89,18 +134,18 @@ public class SecurityJWTUtil {
 
             if (!login.equals(refreshTokenModel.getLogin())) {
                 errorStack.addMessage("Sessão inválida.");
-                return SecurityJWTStatus.INVALID;
+                return INVALID;
             }
 
         } catch (ExpiredJwtException e) {
             errorStack.addMessage("Tempo de sessão expirado.");
-            return SecurityJWTStatus.INVALID;
+            return INVALID;
         } catch (Exception e) {
             errorStack.addMessage("Sessão inválida.");
-            return SecurityJWTStatus.INVALID;
+            return INVALID;
         }
 
-        return SecurityJWTStatus.OK;
+        return OK;
     }
 
     public SecurityJWTBody getBodyJWT(final HttpServletRequest request, final ErrorStack errorStack) {
@@ -113,7 +158,7 @@ public class SecurityJWTUtil {
 
         Jws<Claims> claims = decodeToleranceJWT(_jwt[1]);
 
-        if (Objects.isNull(claims.getBody())) {
+        if (isNull(claims.getBody())) {
             errorStack.addMessage("Erro ao buscar o corpo do authentication");
             return null;
         }
@@ -155,7 +200,7 @@ public class SecurityJWTUtil {
         Date dataExpiracao;
         Date dataDeCriacao = new Date();
 
-        Long expirationTimeMillis = Objects.isNull(handler.getTokenExpirationTime())
+        Long expirationTimeMillis = isNull(handler.getTokenExpirationTime())
                 ? getConfigurationExpirationTime()
                 : getConfigurationExpirationTime(handler.getTokenExpirationTime());
         dataExpiracao = new Date(dataDeCriacao.getTime() + expirationTimeMillis);
@@ -236,4 +281,34 @@ public class SecurityJWTUtil {
         //RETORNO EM MILISSEGUNDOS
         return tokenExpirationTime * 60000;
     }
+
+    /**
+     * Decodificação JWT (sem tolerância).
+     *
+     * @param token Token {@link String}
+     */
+    private Jws<Claims> decodeJWT(final String token) {
+
+        return Jwts.parser()
+                .setSigningKey(SECRET_JWT)
+                .parseClaimsJws(token);
+//                .setSigningKey(Base64.getEncoder().encodeToString(properties.getSecretJWT().getBytes()))
+    }
+
+    /**
+     * Validação de tolerancia de Token.
+     */
+    private SecurityJWTStatus validateTypeTokenExpiration(final String token, final ErrorStack errorStack) {
+
+        try {
+            decodeToleranceJWT(token);
+            errorStack.addMessage("tempo_sessao_expirou");
+            return TIMEOUT;
+
+        } catch (Exception e) {
+            errorStack.addMessage("sessao_invalida");
+            return INVALID;
+        }
+    }
+
 }
