@@ -32,7 +32,7 @@ public class LoginController extends AbstractLoginController<LoginApp, LoginInpu
 
     private final LoginApp app;
 
-    public Main(LoginApp loginApp) {
+    public LoginController(LoginApp loginApp) {
         super(loginApp);
         this.app = loginApp;
     }
